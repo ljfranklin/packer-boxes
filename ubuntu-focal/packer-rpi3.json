@@ -1,0 +1,65 @@
+{
+  "_comment": "Build with `packer build packer.json`, adapted from https://raw.githubusercontent.com/jakobadam/packer-qemu-templates/master/ubuntu/ubuntu.json",
+  "builders": [
+    {
+      "type": "qemu",
+      "boot_command": [
+        "<esc><wait>",
+        "linux /install/vmlinuz<wait>",
+        " auto-install/enable=true<wait>",
+        " fb=false<wait>",
+        " netcfg/get_hostname=ubuntu<wait>",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `preseed` }}<enter><wait>",
+        "initrd /install/initrd.gz<enter><wait>",
+        "boot<enter>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": "{{ user `disk_size` }}",
+      "format": "{{ user `format` }}",
+      "headless": "{{ user `headless` }}",
+      "http_directory": "{{ user `preseed_dir` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_urls": [
+        "{{ user `iso_url` }}"
+      ],
+      "output_directory": "output-rpi3",
+      "communicator": "none",
+      "shutdown_command": "",
+      "shutdown_timeout": "3h0m0s",
+      "vm_name": "{{ user `vm_name` }}",
+      "machine_type": "virt",
+      "accelerator": "none",
+      "qemu_binary": "qemu-system-aarch64",
+      "qemuargs": [
+        [ "-boot", "menu=on" ],
+        [ "-monitor", "none" ],
+        [ "-no-reboot", "" ],
+        [ "-pflash", "deps/flash0.img" ],
+        [ "-m", "{{ user `memory` }}" ],
+        [ "-smp", "cpus={{ user `cpus`}}"],
+        [ "-cpu", "cortex-a57"]
+      ],
+      "cdrom_interface": "virtio-scsi",
+      "vnc_bind_address": "0.0.0.0",
+      "vnc_port_min": 5901,
+      "vnc_port_max": 5901
+    }
+  ],
+  "provisioners": [],
+  "variables": {
+    "cpus": "4",
+    "disk_size": "4096",
+    "format": "raw",
+    "headless": "true",
+    "iso_checksum": "080e166b4be05e59f0f40cbb2c185fe087d51a1d6d1e953c6f430e4ae3b83af5",
+    "iso_url": "http://cdimage.ubuntu.com/ubuntu-legacy-server/releases/20.04/release/ubuntu-20.04-legacy-server-arm64.iso",
+    "memory": "1G",
+    "preseed_dir" : "http",
+    "preseed" : "rpi3-preseed.cfg",
+    "ssh_fullname": "ubuntu",
+    "ssh_password": "ubuntu",
+    "ssh_username": "ubuntu",
+    "version": "0.0.1",
+    "vm_name": "ubuntu-focal"
+  }
+}
