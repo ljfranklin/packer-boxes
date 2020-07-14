@@ -1,7 +1,7 @@
-FROM ubuntu:disco
+FROM ubuntu:focal
 
 RUN apt-get update && \
-  apt-get install -y --no-install-recommends \
+  END=noninteractive apt-get install -y --no-install-recommends \
     build-essential \
     ca-certificates \
     gcc-aarch64-linux-gnu \
