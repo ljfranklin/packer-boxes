@@ -1,0 +1,65 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "boot_command": [
+        "c<enter><wait>",
+        "linux /install.ahf/vmlinuz<wait>",
+        " pkgsel/include='{{ user `packages` }}'<wait>",
+        " apt-setup/local0/repository='{{ user `ppa_repo` }}'<wait>",
+        " apt-setup/local0/key='{{ user `ppa_key` }}'<wait>",
+        " auto-install/enable=true<wait>",
+        " fb=false<wait>",
+        " netcfg/get_hostname=unassigned-hostname<wait>",
+        " netcfg/get_domain=unassigned-domain<wait>",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `preseed` }}<enter><wait>",
+        "initrd /install.ahf/initrd.gz<enter><wait>",
+        "boot<enter>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": "{{ user `disk_size` }}",
+      "format": "{{ user `format` }}",
+      "headless": "{{ user `headless` }}",
+      "http_directory": "{{ user `preseed_dir` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_urls": [
+        "{{ user `iso_url` }}"
+      ],
+      "output_directory": "output-base-odroid",
+      "communicator": "none",
+      "shutdown_command": "",
+      "shutdown_timeout": "3h0m0s",
+      "vm_name": "{{ user `vm_name` }}",
+      "machine_type": "virt",
+      "accelerator": "none",
+      "qemu_binary": "qemu-system-arm",
+      "qemuargs": [
+        [ "-boot", "d" ],
+        [ "-monitor", "none" ],
+        [ "-no-reboot", "" ],
+        [ "-pflash", "./deps/flash0.img" ],
+        [ "-m", "{{ user `memory` }}" ],
+        [ "-smp", "cpus={{ user `cpus`}}"],
+        [ "-cpu", "cortex-a15"]
+      ],
+      "cdrom_interface": "virtio-scsi"
+    }
+  ],
+  "provisioners": [],
+  "variables": {
+    "cpus": "2",
+    "disk_size": "4096",
+    "format": "raw",
+    "headless": "true",
+    "iso_checksum": "88357af3b4a82b2604cd4ce0e3bc248aec002d8d3a152e5218bbbe7555d94aba",
+    "iso_url": "https://cdimage.debian.org/mirror/cdimage/archive/10.6.0/armhf/iso-cd/debian-10.6.0-armhf-xfce-CD-1.iso",
+    "memory": "2G",
+    "preseed_dir" : "http",
+    "preseed" : "preseed-base.cfg",
+    "version": "0.0.1",
+    "vm_name": "debian-buster",
+    "packages": "cloud-init,cloud-utils,linux-image-5.10.9-odroid-2,sudo,wget,curl",
+    "ppa_repo": "http://ppa.launchpad.net/ljfranklin/netboot/ubuntu focal main",
+    "ppa_key": "http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x30C3FB3DDE530FDC"
+  }
+}
