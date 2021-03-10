@@ -8,6 +8,12 @@ output_dir="${original_project_dir}/debian-buster/output-base-arm64"
 tmpdir="$(mktemp -d /tmp/packer.XXXXX)"
 trap '{ rm -rf ${tmpdir}; }' EXIT
 
+pushd "${original_project_dir}/debian-buster/iso" > /dev/null
+  if [ ! -e "debian-10.6.0-arm64-xfce-CD-1.iso" ]; then
+    jigdo-lite --noask https://cdimage.debian.org/mirror/cdimage/archive/10.6.0/arm64/jigdo-cd/debian-10.6.0-arm64-xfce-CD-1.jigdo
+  fi
+popd > /dev/null
+
 rsync -l -r --delete --exclude 'output*' --exclude .git "${original_project_dir}/" "${tmpdir}"
 pushd "${tmpdir}/debian-buster" > /dev/null
   PACKER_LOG=1 packer build packer-base-arm64.json

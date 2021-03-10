@@ -23,7 +23,7 @@
       "http_directory": "{{ user `preseed_dir` }}",
       "iso_checksum": "{{ user `iso_checksum` }}",
       "iso_urls": [
-        "{{ user `iso_url` }}"
+        "{{ user `iso_path` }}"
       ],
       "output_directory": "output-base-odroid",
       "communicator": "none",
@@ -52,7 +52,7 @@
     "format": "raw",
     "headless": "true",
     "iso_checksum": "88357af3b4a82b2604cd4ce0e3bc248aec002d8d3a152e5218bbbe7555d94aba",
-    "iso_url": "https://cdimage.debian.org/mirror/cdimage/archive/10.6.0/armhf/iso-cd/debian-10.6.0-armhf-xfce-CD-1.iso",
+    "iso_path": "iso/debian-10.6.0-armhf-xfce-CD-1.iso",
     "memory": "2G",
     "preseed_dir" : "http",
     "preseed" : "preseed-base.cfg",
