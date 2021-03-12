@@ -58,7 +58,7 @@
     "preseed" : "preseed-base.cfg",
     "version": "0.0.1",
     "vm_name": "debian-buster",
-    "packages": "cloud-init,cloud-utils,linux-image-5.10.3-arm64-1,sudo,wget,curl",
+    "packages": "cloud-init,cloud-utils,linux-image-5.10.3-arm64-1,sudo,wget,curl,resolvconf",
     "ppa_repo": "http://ppa.launchpad.net/ljfranklin/netboot/ubuntu focal main",
     "ppa_key": "http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x30C3FB3DDE530FDC"
   }
