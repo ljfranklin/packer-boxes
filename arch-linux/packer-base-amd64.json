@@ -1,0 +1,53 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "boot_command": [
+        "<enter><wait1m>",
+        "/usr/bin/curl -O http://{{ .HTTPIP }}:{{ .HTTPPort }}/enable-ssh.sh<enter><wait5s>",
+        "/usr/bin/bash ./enable-ssh.sh<enter>"
+      ],
+      "ssh_username": "root",
+      "ssh_password": "root",
+      "boot_wait": "5s",
+      "disk_size": "{{ user `disk_size` }}",
+      "format": "{{ user `format` }}",
+      "headless": "{{ user `headless` }}",
+      "http_directory": "{{ user `http_dir` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_urls": [
+        "{{ user `iso_path` }}"
+      ],
+      "output_directory": "output-base-amd64",
+      "shutdown_command": "shutdown now",
+      "vm_name": "{{ user `vm_name` }}",
+      "qemu_binary": "qemu-system-x86_64",
+      "qemuargs": [
+        [ "-boot", "d" ],
+        [ "-monitor", "none" ],
+        [ "-no-reboot", "" ],
+        [ "-enable-kvm" ],
+        [ "-m", "{{ user `memory` }}" ]
+      ]
+    }
+  ],
+  "provisioners": [
+     {
+       "type": "shell",
+       "execute_command": "ARCH_PACKAGES='{{ user `packages` }}' bash '{{ .Path }}'",
+       "script": "{{ user `http_dir` }}/install.sh"
+     }
+  ],
+  "variables": {
+    "disk_size": "4096",
+    "format": "raw",
+    "headless": "true",
+    "iso_checksum": "e16d16d316a04ef8dba84bc8bde3bc6d7b76b274904085ff49e94a743d7b9a9d",
+    "iso_path": "iso/archlinux-2021.03.01-x86_64.iso",
+    "memory": "2G",
+    "http_dir" : "http",
+    "version": "0.0.1",
+    "vm_name": "arch-linux",
+    "packages": "cloud-init,cloud-guest-utils,openssh"
+  }
+}
