@@ -1,0 +1,65 @@
+{
+  "builders": [
+    {
+      "type": "qemu",
+      "boot_command": [
+        "c<enter><wait>",
+        "linux /install.a64/vmlinuz<wait>",
+        " pkgsel/include='{{ user `packages` }}'<wait>",
+        " apt-setup/local0/repository='{{ user `ppa_repo` }}'<wait>",
+        " apt-setup/local0/key='{{ user `ppa_key` }}'<wait>",
+        " auto-install/enable=true<wait>",
+        " fb=false<wait>",
+        " netcfg/get_hostname=unassigned-hostname<wait>",
+        " netcfg/get_domain=unassigned-domain<wait>",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{ user `preseed` }}<enter><wait>",
+        "initrd /install.a64/initrd.gz<enter><wait>",
+        "boot<enter>"
+      ],
+      "boot_wait": "10s",
+      "disk_size": "{{ user `disk_size` }}",
+      "format": "{{ user `format` }}",
+      "headless": "{{ user `headless` }}",
+      "http_directory": "{{ user `preseed_dir` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_urls": [
+        "{{ user `iso_path` }}"
+      ],
+      "output_directory": "output-base-arm64",
+      "communicator": "none",
+      "shutdown_command": "",
+      "shutdown_timeout": "3h0m0s",
+      "vm_name": "{{ user `vm_name` }}",
+      "machine_type": "virt",
+      "accelerator": "none",
+      "qemu_binary": "qemu-system-aarch64",
+      "qemuargs": [
+        [ "-boot", "d" ],
+        [ "-monitor", "none" ],
+        [ "-no-reboot", "" ],
+        [ "-pflash", "../shared/flash0.img" ],
+        [ "-m", "{{ user `memory` }}" ],
+        [ "-smp", "cpus={{ user `cpus`}}"],
+        [ "-cpu", "cortex-a57"]
+      ],
+      "cdrom_interface": "virtio-scsi"
+    }
+  ],
+  "provisioners": [],
+  "variables": {
+    "cpus": "2",
+    "disk_size": "4096",
+    "format": "raw",
+    "headless": "true",
+    "iso_checksum": "9c8c4a3d1f812e7dc3509193e45bf33df363352d0e5d614d443600b7849ce04e",
+    "iso_path": "iso/debian-11.0.0-arm64-netinst.iso",
+    "memory": "2G",
+    "preseed_dir" : "http",
+    "preseed" : "preseed-base.cfg",
+    "version": "0.0.1",
+    "vm_name": "debian-bullseye",
+    "packages": "cloud-init,cloud-utils,sudo,wget,curl,resolvconf",
+    "ppa_repo": "http://ppa.launchpad.net/ljfranklin/netboot/ubuntu focal main",
+    "ppa_key": "http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x30C3FB3DDE530FDC"
+  }
+}
